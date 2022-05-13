@@ -350,33 +350,51 @@ PRIVATE char *s_traps_str(int flags)
  *===========================================================================*/
 PUBLIC void privileges_dmp()
 {
-
+  struct proc *rdy_head[NR_SCHED_QUEUES];
+  struct kinfo kinfo;
   register struct proc *rp;
-  static struct proc *oldrp = BEG_PROC_ADDR;
+  vir_bytes ptr_diff;
   int r;
 
-  /* First obtain a fresh copy of the current process table. */
-  if ((r = sys_getproctab(proc)) != OK) {
+  /* First obtain a scheduling information. */
+  if ((r = sys_getschedinfo(proc, rdy_head)) != OK) {
       report("IS","warning: couldn't get copy of process table", r);
       return;
   }
+  /* Then obtain kernel addresses to correct pointer information. */
+  if ((r = sys_getkinfo(&kinfo)) != OK) {
+      report("IS","warning: couldn't get kernel addresses", r);
+      return;
+  }
 
-  /* Now show scheduling queues. */
-  printf("\n-priority----PID---cpu-time---sys-time----pointer-address-\n");
-  
+  /* Update all pointers. Nasty pointer algorithmic ... */
+  ptr_diff = (vir_bytes) proc - (vir_bytes) kinfo.proc_addr;
+  for (r=0;r<NR_SCHED_QUEUES; r++)
+      if (rdy_head[r] != NIL_PROC)
+          rdy_head[r] =
+              (struct proc *)((vir_bytes) rdy_head[r] + ptr_diff);
+  for (rp=BEG_PROC_ADDR; rp < END_PROC_ADDR; rp++)
+      if (rp->p_nextready != NIL_PROC)
+          rp->p_nextready =
+               (struct proc *)((vir_bytes) rp->p_nextready + ptr_diff);
+
+  /* Mostra infos sobre os processos prontos para execução */
+  printf("\n-priority--PID----cpu-time---sys-time----pointer-address-\n");
 
   for (r=0;r<NR_SCHED_QUEUES; r++) {
-      for (rp = oldrp; rp < END_PROC_ADDR; rp++) {
-        if(rp->p_priority == r) {
-          printf(" %02u %02d %02u %6lu %6lu",
-            rp->p_priority,
-            proc_nr(rp),
-            rp->p_quantum_size, 
-            rp->p_sys_time,
-            rp->p_sys_time);
-            printf("\n");
-        }
+      rp = rdy_head[r];
+      if (!rp) continue;
+      while (rp != NIL_PROC) {
+          printf(" %02u %02d %02u %6lu %6lu"
+                  rp->p_priority,
+                  proc_nr(rp),
+                  rp->p_quantum_size,
+                  rp->p_sys_time,
+                  rp->p_sys_time);
+          printf("\n");
+          rp = rp->p_nextready;
       }
+      printf("\n");
   }
   printf("\n");
 }
