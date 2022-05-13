@@ -390,7 +390,7 @@ PUBLIC void privileges_dmp()
                   proc_nr(rp),
                   rp->p_quantum_size,
                   rp->p_sys_time,
-                  rp->p_sys_time);
+                  rp);
           printf("\n");
           rp = rp->p_nextready;
       }
