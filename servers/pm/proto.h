@@ -52,6 +52,13 @@ _PROTOTYPE( void pm_exit, (struct mproc *rmp, int exit_status)		);
 /* getset.c */
 _PROTOTYPE( int do_getset, (void)					);
 
+/* lock priority */
+_PROTOTYPE( int do_lockpriority, (void)					);
+
+/* unlock priority */
+_PROTOTYPE( int do_unlockpriority, (void)					);
+
+
 /* main.c */
 _PROTOTYPE( int main, (void)						);
 
