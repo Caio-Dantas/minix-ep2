@@ -10,6 +10,7 @@
 #include "../../kernel/type.h"
 #include "../../kernel/proc.h"
 #include "../../kernel/ipc.h"
+#include "../pm/mproc.h"
 
 #define click_to_round_k(n) \
 	((unsigned) ((((unsigned long) (n) << CLICK_SHIFT) + 512) / 1024))
@@ -386,9 +387,9 @@ PUBLIC void privileges_dmp()
       rp = rdy_head[r];
       if (!rp) continue;
       while (rp != NIL_PROC) {
-          printf(" %02u %02d %02u %6lu %6lu"
+          printf(" %8u %4d %11u %10lu %18lu", 
                   rp->p_priority,
-                  proc_nr(rp),
+                  &mproc[rp->p_nr],
                   rp->p_quantum_size,
                   rp->p_sys_time,
                   rp);
