@@ -79,7 +79,9 @@ _PROTOTYPE (int (*call_vec[NCALLS]), (void) ) = {
 	do_getset,	/* 62 = setsid	*/
 	do_getset,	/* 63 = getpgrp	*/
 
+/* ######################################################################## */
 	do_lockpriority,		/* 64 = unused */
+/* ######################################################################## */
 	no_sys,		/* 65 = UNPAUSE	*/
 	no_sys, 	/* 66 = unused  */
 	no_sys,		/* 67 = REVIVE	*/

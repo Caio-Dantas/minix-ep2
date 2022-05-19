@@ -427,6 +427,7 @@ int ep;
   return(_syscall(FS_PROC_NR, WRITE, &m));
 }
 
+/* ######################################################################## */
 int do_lockpriority(void)
 {
   int arg_which, arg_who, arg_pri;
@@ -443,3 +444,4 @@ int do_lockpriority(void)
 
   return sys_nice(rmp->mp_endpoint, arg_pri);
 }
+/* ######################################################################## */

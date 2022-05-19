@@ -1,3 +1,4 @@
+/* ######################################################################## */
 #include <lib.h>
 #include <unistd.h>
 
@@ -11,3 +12,4 @@ int lockpriority(pid_t proc_pid, int prio)
 
     return ( _syscall(PM_PROC_NR, LOCKPRIORITY, &m) );
 }
+/* ######################################################################## */
