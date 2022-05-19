@@ -52,6 +52,7 @@
 #define CHROOT		  61 
 #define SETSID		  62
 #define GETPGRP		  63
+#define LOCKPRIORITY
 
 /* The following are not system calls, but are processed like them. */
 #define UNPAUSE		  65	/* to MM or FS: check for EINTR */
