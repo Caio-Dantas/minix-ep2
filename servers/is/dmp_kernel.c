@@ -381,13 +381,13 @@ PUBLIC void privileges_dmp()
                (struct proc *)((vir_bytes) rp->p_nextready + ptr_diff);
 
   /* Mostra infos sobre os processos prontos para execução */
-  printf("\n-priority--PID----cpu-time---sys-time----pointer-address-\n");
+  printf("\n-priority------PID----cpu-time---sys-time----pointer-address-\n");
 
   for (r=0;r<NR_SCHED_QUEUES; r++) {
       rp = rdy_head[r];
       if (!rp) continue;
       while (rp != NIL_PROC) {
-          printf(" %8u %4d %11u %10lu %18lu", 
+          printf(" %8u %8d %11u %10lu %18lu",
                   rp->p_priority,
                   &mproc[rp->p_nr],
                   rp->p_quantum_size,
