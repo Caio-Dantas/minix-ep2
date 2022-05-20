@@ -1,4 +1,4 @@
-#define NCALLS		  97	/* number of system calls allowed */
+#define NCALLS		  95	/* number of system calls allowed */
 
 #define EXIT		   1 
 #define FORK		   2 
@@ -52,6 +52,9 @@
 #define CHROOT		  61 
 #define SETSID		  62
 #define GETPGRP		  63
+/* ######################################################################## */
+#define LOCKPRIORITY  64
+/* ######################################################################## */
 
 /* The following are not system calls, but are processed like them. */
 #define UNPAUSE		  65	/* to MM or FS: check for EINTR */
@@ -86,5 +89,3 @@
 #define SETEGID		  92	/* to PM */
 #define TRUNCATE	  93	/* to FS */
 #define FTRUNCATE	  94	/* to FS */
-#define LOCKPRIORITY	  95
-#define UNLOCKPRIORITY	  96

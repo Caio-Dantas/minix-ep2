@@ -10,8 +10,6 @@
 #include <signal.h>
 #include "mproc.h"
 #include "param.h"
-#include <sys/resource.h>
-
 
 /*===========================================================================*
  *				do_getset				     *
@@ -82,35 +80,4 @@ PUBLIC int do_getset()
 		break;	
   }
   return(r);
-}
-
-
-
-PUBLIC int do_lockpriority() {
-	
-	register struct mproc *parent_proc = mp;
-
-	pid_t child_pid = m_in.m1_i1;
-	int proc_priority = m_in.m1_i2;
-	int result;
-
-
-	if(parent_proc->mp_pid != getpprocnr(child_pid)) {
-		return -2;
-	}
-
-	result = setpriority(PRIO_PROCESS, child_pid, proc_priority);
-
-	if(result == 0) {
-		return proc_priority;
-	}
-	return -1;
-	
-}
-
-
-PUBLIC int do_unlockpriority() {
-	
-	return 0;
-	
 }

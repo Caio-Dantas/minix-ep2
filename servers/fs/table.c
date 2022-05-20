@@ -79,8 +79,9 @@ PUBLIC _PROTOTYPE (int (*call_vec[]), (void) ) = {
 	do_chroot,	/* 61 = chroot	*/
 	do_setsid,	/* 62 = setsid	*/
 	no_sys,		/* 63 = getpgrp	*/
-
-	no_sys,		/* 64 = KSIG: signals originating in the kernel	*/
+/* ######################################################################## */
+	no_sys,		/* 64 = lockpriority */
+/* ######################################################################## */
 	do_unpause,	/* 65 = UNPAUSE	*/
 	no_sys, 	/* 66 = unused  */
 	do_revive,	/* 67 = REVIVE	*/
@@ -112,8 +113,6 @@ PUBLIC _PROTOTYPE (int (*call_vec[]), (void) ) = {
 	no_sys,		/* 92 = setegid */
 	do_truncate,	/* 93 = truncate */
 	do_ftruncate,	/* 94 = truncate */
-	no_sys, /* 95 = lock priority */
-	no_sys /* 96 = unlock priority */
 };
 /* This should not fail with "array size is negative": */
 extern int dummy[sizeof(call_vec) == NCALLS * sizeof(call_vec[0]) ? 1 : -1];

@@ -427,3 +427,21 @@ int ep;
   return(_syscall(FS_PROC_NR, WRITE, &m));
 }
 
+/* ######################################################################## */
+int do_lockpriority(void)
+{
+  int arg_which, arg_who, arg_pri;
+  struct mproc *rmp;
+  int rmp_nr;
+
+  arg_which = m_in.m1_i1;
+  arg_who = m_in.m1_i2;
+  arg_pri = m_in.m1_i3;
+
+  rmp_nr = proc_from_pid(arg_who);
+
+  rmp = &mproc[rmp_nr];
+
+  return sys_nice(rmp->mp_endpoint, arg_pri);
+}
+/* ######################################################################## */

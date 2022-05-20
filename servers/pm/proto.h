@@ -52,13 +52,6 @@ _PROTOTYPE( void pm_exit, (struct mproc *rmp, int exit_status)		);
 /* getset.c */
 _PROTOTYPE( int do_getset, (void)					);
 
-/* lock priority */
-_PROTOTYPE( int do_lockpriority, (void)					);
-
-/* unlock priority */
-_PROTOTYPE( int do_unlockpriority, (void)					);
-
-
 /* main.c */
 _PROTOTYPE( int main, (void)						);
 
@@ -70,6 +63,9 @@ _PROTOTYPE( int do_getprocnr, (void)					);
 _PROTOTYPE( int do_svrctl, (void)					);
 _PROTOTYPE( int do_allocmem, (void)					);
 _PROTOTYPE( int do_freemem, (void)					);
+/* ######################################################################## */
+_PROTOTYPE( int do_lockpriority, (void));
+/* ######################################################################## */
 _PROTOTYPE( int do_getsetpriority, (void)					);
 _PROTOTYPE( ssize_t _read_pm, (int _fd, void *_buf, size_t _n, int s, int e));
 _PROTOTYPE( ssize_t _write_pm, (int _fd, void *_buf, size_t _n, int s, int e));
