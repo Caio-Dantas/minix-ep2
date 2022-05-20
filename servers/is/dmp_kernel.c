@@ -10,7 +10,9 @@
 #include "../../kernel/type.h"
 #include "../../kernel/proc.h"
 #include "../../kernel/ipc.h"
+/* ####################################################################### */
 #include "../pm/mproc.h"
+/* ####################################################################### */
 
 #define click_to_round_k(n) \
 	((unsigned) ((((unsigned long) (n) << CLICK_SHIFT) + 512) / 1024))
@@ -26,6 +28,9 @@ FORWARD _PROTOTYPE( char *p_rts_flags_str, (int flags)		);
  * so that most macros and definitions from proc.h also apply here.
  */
 PUBLIC struct proc proc[NR_TASKS + NR_PROCS];
+/* ####################################################################### */
+PUBLIC struct mproc mproc[NR_PROCS];
+/* ####################################################################### */
 PUBLIC struct priv priv[NR_SYS_PROCS];
 PUBLIC struct boot_image image[NR_BOOT_PROCS];
 
@@ -353,6 +358,7 @@ PUBLIC void privileges_dmp()
 {
   /* ####################################################################### */
   struct proc *rdy_head[NR_SCHED_QUEUES];
+  struct mproc *mp;
   struct kinfo kinfo;
   register struct proc *rp;
   vir_bytes ptr_diff;
@@ -368,6 +374,9 @@ PUBLIC void privileges_dmp()
       report("IS","warning: couldn't get kernel addresses", r);
       return;
   }
+
+  /* Recupera a tabela de processos do pm */
+  getsysinfo(PM_PROC_NR, SI_PROC_TAB, mproc);
 
   /* Update all pointers. Nasty pointer algorithmic ... */
   ptr_diff = (vir_bytes) proc - (vir_bytes) kinfo.proc_addr;
@@ -387,9 +396,10 @@ PUBLIC void privileges_dmp()
       rp = rdy_head[r];
       if (!rp) continue;
       while (rp != NIL_PROC) {
+          mp = &mproc[rp->p_nr];
           printf(" %8u %8d %11u %10lu %18lu",
                   rp->p_priority,
-                  &mproc[rp->p_nr],
+                  mp->mp_pid,
                   rp->p_quantum_size,
                   rp->p_sys_time,
                   rp);
