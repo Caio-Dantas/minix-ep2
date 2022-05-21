@@ -1,0 +1,62 @@
+#!/bin/bash
+MINIX_IMG="minix.img"
+ISO_PATH="IDE-3.1.2a.iso"
+MEM_SIZE=512M
+RAM_SIZE=1024M
+
+FILES_IMG="files.iso"
+FILES=(
+    "./testelock.c"
+    "./copyfiles.sh"
+    # Parte 1
+    "./servers/is/dmp_kernel.c"
+    # Parte 2
+    "./include/lockprioritylib.h"
+    "./include/minix/callnr.h"
+    "./servers/pm/mproc.h"
+    "./servers/pm/misc.c"
+    "./servers/pm/proto.h"
+    "./servers/pm/table.c")
+
+# --- Funções
+create_img() {
+    qemu-img create $MINIX_IMG $MEM_SIZE
+}
+
+first_boot() {
+    qemu-kvm \
+        -rtc base=utc \
+        -m $RAM_SIZE \
+        -hda $MINIX_IMG \
+        -cdrom $ISO_PATH \
+        -boot d
+}
+
+run_img() {
+    qemu-kvm \
+        -rtc base=utc \
+        -m $RAM_SIZE \
+        -cdrom $FILES_IMG \
+        -hda $MINIX_IMG
+}
+
+# --- Comandos
+case $1 in
+    live_boot)
+        echo "Criando imagem '$MINIX_IMG'"
+        create_img $MINIX_IMG
+        echo "Execute 'setup' para instalar minix em $MINIX_IMG."
+        first_boot
+        ;;
+    update_files)
+        echo "Criando imagem '$FILES_IMG'"
+        mkisofs -o $FILES_IMG ${FILES[*]}
+        ;;
+    run)
+        echo "Executando imagem..."
+        run_img
+        ;;
+    *)
+        echo 'Argumento inválido!'
+        ;;
+esac
