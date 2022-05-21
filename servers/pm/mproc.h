@@ -45,7 +45,7 @@ EXTERN struct mproc {
   /* Backwards compatibility for signals. */
   sighandler_t mp_func;		/* all sigs vectored to a single user fcn */
 
-  unsigned mp_flags;		/* flag bits */
+  unsigned int mp_flags;		/* flag bits */
   vir_bytes mp_procargs;        /* ptr to proc's initial stack arguments */
   struct mproc *mp_swapq;	/* queue of procs waiting to be swapped in */
   message mp_reply;		/* reply message to be sent to one */
@@ -71,6 +71,9 @@ EXTERN struct mproc {
 #define SWAPIN	 	0x800	/* set if on the "swap this in" queue */
 #define DONT_SWAP      0x1000   /* never swap out this process */
 #define PRIV_PROC      0x2000   /* system process, special privileges */
+/* ######################################################################## */
+#define LOCK_PROC   0x4000 /* prioridade travada */
+/* ######################################################################## */
 
 #define NIL_MPROC ((struct mproc *) 0)
 

@@ -245,6 +245,11 @@ PUBLIC int do_getsetpriority()
 
 	rmp = &mproc[rmp_nr];
 
+  /*######################################################################*/
+    if (rmp->mp_flags & LOCK_PROC)
+        return(EINVAL);
+  /*######################################################################*/
+
 	if (mp->mp_effuid != SUPER_USER &&
 	   mp->mp_effuid != rmp->mp_effuid && mp->mp_effuid != rmp->mp_realuid)
 		return EPERM;
@@ -430,18 +435,23 @@ int ep;
 /* ######################################################################## */
 int do_lockpriority(void)
 {
-  int arg_which, arg_who, arg_pri;
-  struct mproc *rmp;
-  int rmp_nr;
+  int pid_filho, prioridade, nr_filho, r;
+  struct mproc *proc_filho;
 
-  arg_which = m_in.m1_i1;
-  arg_who = m_in.m1_i2;
-  arg_pri = m_in.m1_i3;
+  /* Recupera argumentos da chamada */
+  pid_filho = m_in.m1_i1;
+  prioridade = m_in.m1_i2;
 
-  rmp_nr = proc_from_pid(arg_who);
+  /* Tenta mudar a prioridade */
+  if (setpriority(PRIO_USER, pid_filho, prioridade)) {
+    return -3;
+  }
 
-  rmp = &mproc[rmp_nr];
+  /* Tudo certo, tranca prioridade */
+  nr_filho = proc_from_pid(pid_filho);
+  proc_filho = &mproc[nr_filho];
+  proc_filho->mp_flags |= LOCK_PROC;
 
-  return sys_nice(rmp->mp_endpoint, arg_pri);
+  return prioridade;
 }
 /* ######################################################################## */
