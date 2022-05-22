@@ -30,9 +30,6 @@ struct proc {
   struct priv *p_priv;		/* system privileges structure */
   short p_rts_flags;		/* process is runnable only if zero */
   short p_misc_flags;		/* flags that do suspend the process */
-/* ######################################################################## */
-  char p_locked_pri; /* Prioridade do processo está bloqueada */
-/* ######################################################################## */
 
   char p_priority;		/* current scheduling priority */
   char p_max_priority;		/* maximum scheduling priority */
@@ -77,6 +74,9 @@ struct proc {
 /* Misc flags */
 #define REPLY_PENDING	0x01	/* reply to IPC_REQUEST is pending */
 #define MF_VM		0x08	/* process uses VM */
+/* ######################################################################## */
+#define LOCKED_PRI    0x200	/* processo com prioridade travada */
+/* ######################################################################## */
 
 /* Scheduling priorities for p_priority. Values must start at zero (highest
  * priority) and increment.  Priorities of the processes in the boot image 

@@ -611,7 +611,7 @@ int *front;					/* return: front or back */
    */
   if (! time_left) {				/* quantum consumed ? */
       rp->p_ticks_left = rp->p_quantum_size; 	/* give new quantum */
-      if (rp->p_priority < (IDLE_Q-1) && rp->p_locked_pri == 0) {  	 
+      if (rp->p_priority < (IDLE_Q-1) && !(rp->p_misc_flags & LOCKED_PRI)) {  	
           rp->p_priority += 1;			/* lower priority */
       }
   }

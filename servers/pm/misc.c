@@ -25,6 +25,10 @@
 #include "param.h"
 #include "../../kernel/proc.h"
 
+/* ####################################################################### */
+PUBLIC struct proc proc[NR_TASKS + NR_PROCS];
+/* ####################################################################### */
+
 /*===========================================================================*
  *				do_allocmem				     *
  *===========================================================================*/
@@ -438,7 +442,6 @@ int do_lockpriority(void)
   int pid_filho, prioridade, nr_filho;
   struct mproc *mproc_filho;
   struct proc *proc_filho;
-  struct proc proc[NR_TASKS + NR_PROCS];
   printf("==== Entrou na syscall =====\n");
 
   pid_filho = m_in.m1_i2;
@@ -450,7 +453,7 @@ int do_lockpriority(void)
   mproc_filho = &mproc[nr_filho];
   proc_filho = &proc[nr_filho];
 
-  if (proc_filho->p_locked_pri != 0) {
+  if (proc_filho->p_misc_flags & LOCKED_PRI) {
       return -1;
   }
 
@@ -466,7 +469,7 @@ int do_lockpriority(void)
   }
 
   /* Deu certo! Trava prioridade */
-  proc_filho->p_locked_pri = 1;
+  proc_filho->p_misc_flags |= LOCKED_PRI;
   printf("==== Saiu da syscall ====\n");
   return 0;
 }
