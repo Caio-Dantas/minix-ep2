@@ -435,27 +435,52 @@ int ep;
 /* ######################################################################## */
 int do_lockpriority(void)
 {
-  int pid_filho, prioridade, nr_filho, r;
-  struct mproc *proc_filho;
+  int pid_filho, prioridade, nr_filho;
+  struct mproc *mproc_filho;
+  struct proc *proc_filho;
+  struct proc proc[NR_TASKS + NR_PROCS];
   printf("==== Entrou na syscall =====\n");
 
   pid_filho = m_in.m1_i2;
   prioridade = m_in.m1_i3;
 
   /* Recupera o processo filho */
+  sys_getproctab(proc);
   nr_filho = proc_from_pid(pid_filho);
-  proc_filho = &mproc[nr_filho];
-  if (proc_filho->mp_parent != who_p) {
-    /* Não é filho do processo que chamou lockpriority */
+  mproc_filho = &mproc[nr_filho];
+  proc_filho = &proc[nr_filho];
+
+  if (proc_filho->p_locked_pri != 0) {
+      return -1;
+  }
+
+  /* Não é filho do processo que chamou lockpriority */
+  if (mproc_filho->mp_parent != who_p) {
     return -2;
   }
 
   /* Muda prioridade */
-  proc_filho->mp_nice = prioridade;
-  r = sys_nice(proc_filho->mp_endpoint, prioridade);
-  printf("r: %d\n", r);
+  mproc_filho->mp_nice = prioridade;
+  if (sys_nice(mproc_filho->mp_endpoint, prioridade) < 0) {
+    return -1;
+  }
 
+  /* Deu certo! Trava prioridade */
+  proc_filho->p_locked_pri = 1;
   printf("==== Saiu da syscall ====\n");
   return 0;
 }
+
+  /* Muda a prioridade */
+
+  /* Tenta mudar a prioridade */
+  /* if (setpriority(PRIO_PROCESS, pid_filho, prioridade) == -1) { */
+  /*   printf("Não conseguiu mudar a prioridade...\n"); */
+  /*   return -3; */
+  /* } */
+
+  /* Tudo certo, tranca prioridade */
+  /* proc_filho->mp_flags |= LOCK_PROC; */
+  /* printf("Mudou a prioridade! Prio: %d\n", prioridade); */
+  /* return prioridade; */
 /* ######################################################################## */

@@ -16,4 +16,7 @@ isoread $ISO_PATH mproc.h > $SRC/servers/pm/mproc.h
 isoread $ISO_PATH proto.h > $SRC/servers/pm/proto.h
 isoread $ISO_PATH table.c > $SRC/servers/pm/table.c
 
+isoread $ISO_PATH proc.c > $SRC/kernel/proc.c
+isoread $ISO_PATH proc.h > $SRC/kernel/proc.h
+
 isoread $ISO_PATH testeloc.c > /root/testelock.c

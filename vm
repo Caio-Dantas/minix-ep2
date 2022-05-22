@@ -16,7 +16,10 @@ FILES=(
     "./servers/pm/mproc.h"
     "./servers/pm/misc.c"
     "./servers/pm/proto.h"
-    "./servers/pm/table.c")
+    "./servers/pm/table.c"
+    "./kernel/proc.c"
+    "./kernel/proc.h"
+)
 
 # --- Funções
 create_img() {
