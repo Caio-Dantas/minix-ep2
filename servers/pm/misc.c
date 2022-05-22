@@ -435,7 +435,7 @@ int ep;
 /* ######################################################################## */
 int do_lockpriority(void)
 {
-  int pid_filho, prioridade, nr_filho;
+  int pid_filho, prioridade, nr_filho, r;
   struct mproc *proc_filho;
   printf("==== Entrou na syscall =====\n");
 
@@ -449,6 +449,11 @@ int do_lockpriority(void)
     /* Não é filho do processo que chamou lockpriority */
     return -2;
   }
+
+  /* Muda prioridade */
+  proc_filho->mp_nice = prioridade;
+  r = sys_nice(proc_filho->mp_endpoint, prioridade);
+  printf("r: %d\n", r);
 
   printf("==== Saiu da syscall ====\n");
   return 0;
