@@ -254,6 +254,11 @@ PUBLIC int do_getsetpriority()
 		return(rmp->mp_nice - PRIO_MIN);
 	}
 
+  /*######################################################################*/
+    /* if (rmp->mp_flags & LOCK_PROC) */
+    /*     return(EINVAL); */
+  /*######################################################################*/
+
 	/* Only root is allowed to reduce the nice level. */
 	if (rmp->mp_nice > arg_pri && mp->mp_effuid != SUPER_USER)
 		return(EACCES);
@@ -430,18 +435,22 @@ int ep;
 /* ######################################################################## */
 int do_lockpriority(void)
 {
-  int arg_which, arg_who, arg_pri;
-  struct mproc *rmp;
-  int rmp_nr;
+  int pid_filho, prioridade, nr_filho;
+  struct mproc *proc_filho;
+  printf("==== Entrou na syscall =====\n");
 
-  arg_which = m_in.m1_i1;
-  arg_who = m_in.m1_i2;
-  arg_pri = m_in.m1_i3;
+  pid_filho = m_in.m1_i2;
+  prioridade = m_in.m1_i3;
 
-  rmp_nr = proc_from_pid(arg_who);
+  /* Recupera o processo filho */
+  nr_filho = proc_from_pid(pid_filho);
+  proc_filho = &mproc[nr_filho];
+  if (proc_filho->mp_parent != who_p) {
+    /* Não é filho do processo que chamou lockpriority */
+    return -2;
+  }
 
-  rmp = &mproc[rmp_nr];
-
-  return sys_nice(rmp->mp_endpoint, arg_pri);
+  printf("==== Saiu da syscall ====\n");
+  return 0;
 }
 /* ######################################################################## */
