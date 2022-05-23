@@ -254,11 +254,6 @@ PUBLIC int do_getsetpriority()
 		return(rmp->mp_nice - PRIO_MIN);
 	}
 
-  /*######################################################################*/
-    /* if (rmp->mp_flags & LOCK_PROC) */
-    /*     return(EINVAL); */
-  /*######################################################################*/
-
 	/* Only root is allowed to reduce the nice level. */
 	if (rmp->mp_nice > arg_pri && mp->mp_effuid != SUPER_USER)
 		return(EACCES);
