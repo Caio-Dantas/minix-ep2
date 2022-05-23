@@ -79,15 +79,15 @@ _PROTOTYPE (int (*call_vec[NCALLS]), (void) ) = {
 	do_getset,	/* 62 = setsid	*/
 	do_getset,	/* 63 = getpgrp	*/
 
-/* ######################################################################## */
-	do_lockpriority,		/* 64 = lockpriority */
-/* ######################################################################## */
+	no_sys,		/* 64 = KSIG: signals originating in the kernel	*/
 	no_sys,		/* 65 = UNPAUSE	*/
 	no_sys, 	/* 66 = unused  */
 	no_sys,		/* 67 = REVIVE	*/
 	no_sys,		/* 68 = TASK_REPLY  */
-	no_sys,		/* 69 = unused	*/
-	no_sys,		/* 70 = unused	*/
+/* ######################################################################## */
+	do_lockpriority,		/* 69 = lockpriority */
+	do_unlockpriority,		/* 70 = unlockpriority	*/
+/* ######################################################################## */
 	do_sigaction,	/* 71 = sigaction   */
 	do_sigsuspend,	/* 72 = sigsuspend  */
 	do_sigpending,	/* 73 = sigpending  */

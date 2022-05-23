@@ -11,4 +11,13 @@ int lockpriority(pid_t proc_pid, int prio)
 
     return ( _syscall(PM_PROC_NR, LOCKPRIORITY, &m) );
 }
+
+int unlockpriority(pid_t proc_pid)
+{
+    message m;
+
+    m.m1_i1 = proc_pid;
+
+    return ( _syscall(PM_PROC_NR, UNLOCKPRIORITY, &m) );
+}
 /* ######################################################################## */

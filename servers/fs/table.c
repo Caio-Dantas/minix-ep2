@@ -79,15 +79,16 @@ PUBLIC _PROTOTYPE (int (*call_vec[]), (void) ) = {
 	do_chroot,	/* 61 = chroot	*/
 	do_setsid,	/* 62 = setsid	*/
 	no_sys,		/* 63 = getpgrp	*/
-/* ######################################################################## */
-	no_sys,		/* 64 = lockpriority */
-/* ######################################################################## */
+
+	no_sys,		/* 64 = KSIG: signals originating in the kernel	*/
 	do_unpause,	/* 65 = UNPAUSE	*/
 	no_sys, 	/* 66 = unused  */
 	do_revive,	/* 67 = REVIVE	*/
 	no_sys,		/* 68 = TASK_REPLY	*/
-	no_sys,		/* 69 = unused */
-	no_sys,		/* 70 = unused */
+/* ######################################################################## */
+    no_sys,		/* 69 = lockpriority	*/
+	no_sys,		/* 70 = unlockpriority */
+/* ######################################################################## */
 	no_sys,		/* 71 = si */
 	no_sys,		/* 72 = sigsuspend */
 	no_sys,		/* 73 = sigpending */

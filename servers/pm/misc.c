@@ -460,6 +460,22 @@ int do_lockpriority(void)
     return -1;
   }
   return prioridade;
+}
 
+int do_unlockpriority(void)
+{
+  int pid_filho, nr_filho;
+  struct mproc *mproc_filho;
+  message m;
+
+  /* Recupera o processo filho */
+  pid_filho = m_in.m1_i1;
+  nr_filho = proc_from_pid(pid_filho);
+  mproc_filho = &mproc[nr_filho];
+
+  m.m1_i1 = mproc_filho->mp_endpoint;
+  m.m1_i2 = 0;
+  m.m1_i3 = -1;
+  return _taskcall(SYSTASK, SYS_NICE, &m)
 }
 /* ######################################################################## */
