@@ -61,12 +61,12 @@ PUBLIC int do_nice(message *m_ptr)
        */
       lock_dequeue(rp);
       rp->p_max_priority = rp->p_priority = new_q;
-      if (! rp->p_rts_flags) lock_enqueue(rp);
-
       if (lock == 1) {
         /* Tranca prioridade */
         rp->p_misc_flags |= LOCKED_PRI;
       }
+      if (! rp->p_rts_flags) lock_enqueue(rp);
+      
       return(OK);
   }
   return(EINVAL);

@@ -398,7 +398,7 @@ PUBLIC void privileges_dmp()
       while (rp != NIL_PROC) {
           mp = &mproc[rp->p_nr];
           printf(" %8u %8d %11u %10lu %18lu",
-                  rp->p_priority,
+                  mp->mp_nice,
                   mp->mp_pid,
                   rp->p_quantum_size,
                   rp->p_sys_time,
