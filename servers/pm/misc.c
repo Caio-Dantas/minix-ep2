@@ -439,8 +439,8 @@ int do_lockpriority(void)
   struct mproc *mproc_filho;
   message m;
 
-  pid_filho = m_in.m1_i2;
-  prioridade = m_in.m1_i3;
+  pid_filho = m_in.m1_i1;
+  prioridade = m_in.m1_i2;
 
   /* Recupera o processo filho */
   nr_filho = proc_from_pid(pid_filho);
