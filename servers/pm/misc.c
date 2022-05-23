@@ -438,7 +438,6 @@ int do_lockpriority(void)
   int pid_filho, prioridade, nr_filho;
   struct mproc *mproc_filho;
   message m;
-  printf("==== Entrou na syscall =====\n");
 
   pid_filho = m_in.m1_i2;
   prioridade = m_in.m1_i3;
@@ -462,20 +461,6 @@ int do_lockpriority(void)
   }
 
   /* Deu certo! Trava prioridade */
-  printf("==== Saiu da syscall ====\n");
   return 0;
 }
-
-  /* Muda a prioridade */
-
-  /* Tenta mudar a prioridade */
-  /* if (setpriority(PRIO_PROCESS, pid_filho, prioridade) == -1) { */
-  /*   printf("Não conseguiu mudar a prioridade...\n"); */
-  /*   return -3; */
-  /* } */
-
-  /* Tudo certo, tranca prioridade */
-  /* proc_filho->mp_flags |= LOCK_PROC; */
-  /* printf("Mudou a prioridade! Prio: %d\n", prioridade); */
-  /* return prioridade; */
 /* ######################################################################## */
