@@ -362,7 +362,7 @@ PUBLIC void privileges_dmp()
   struct kinfo kinfo;
   register struct proc *rp;
   vir_bytes ptr_diff;
-  int r;
+  int r, user_ticks, sys_ticks;
 
   /* First obtain a scheduling information. */
   if ((r = sys_getschedinfo(proc, rdy_head)) != OK) {
@@ -397,11 +397,23 @@ PUBLIC void privileges_dmp()
       if (!rp) continue;
       while (rp != NIL_PROC) {
           mp = &mproc[rp->p_nr];
-          printf(" %8u %8d %11u %10lu %18lu",
-                  mp->mp_nice,
+
+		      user_ticks = rp->p_user_time;
+		      sys_ticks = rp->p_sys_time;
+
+          if(mp->mp_nice){
+            printf(" %3d    ", mp->mp_nice);
+          } else {
+            printf("         ");
+          }
+
+          
+          printf(" %8d %3d:%02d      %3d:%02d %12lu",
                   mp->mp_pid,
-                  rp->p_quantum_size,
-                  rp->p_sys_time,
+                  (user_ticks/HZ/60), 
+                  ((user_ticks/HZ)%60),
+                  (sys_ticks/HZ/60), 
+                  ((sys_ticks/HZ)%60),
                   rp);
           printf("\n");
           rp = rp->p_nextready;
