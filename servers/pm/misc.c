@@ -459,8 +459,7 @@ int do_lockpriority(void)
   if (_taskcall(SYSTASK, SYS_NICE, &m)) {
     return -1;
   }
+  return prioridade;
 
-  /* Deu certo! Trava prioridade */
-  return 0;
 }
 /* ######################################################################## */
