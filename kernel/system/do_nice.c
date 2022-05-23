@@ -18,7 +18,7 @@
 PUBLIC int do_nice(message *m_ptr)
 {
 /* Change process priority or stop the process. */
-  int proc_nr, pri, new_q ;
+  int proc_nr, pri, new_q, lock;
   register struct proc *rp;
 
   /* Extract the message parameters and do sanity checking. */
@@ -26,6 +26,13 @@ PUBLIC int do_nice(message *m_ptr)
   if (iskerneln(proc_nr)) return(EPERM);
   pri = m_ptr->PR_PRIORITY;
   rp = proc_addr(proc_nr);
+
+  lock = m_ptr->m1_i3;
+  if (lock == -1) {
+      /* Desbloqueia o processo */
+      rp->p_misc_flags &= ~LOCKED_PRI;
+      return(OK);
+  }
 
   if (pri == PRIO_STOP) {
 
@@ -35,6 +42,10 @@ PUBLIC int do_nice(message *m_ptr)
       return(OK);
   }
   else if (pri >= PRIO_MIN && pri <= PRIO_MAX) {
+      if (rp->p_misc_flags & LOCKED_PRI) {
+          /* Prioridade bloqueada, não pode mudar */
+          return(EINVAL);
+      }
 
       /* The value passed in is currently between PRIO_MIN and PRIO_MAX. 
        * We have to scale this between MIN_USER_Q and MAX_USER_Q to match 
@@ -52,6 +63,10 @@ PUBLIC int do_nice(message *m_ptr)
       rp->p_max_priority = rp->p_priority = new_q;
       if (! rp->p_rts_flags) lock_enqueue(rp);
 
+      if (lock == 1) {
+        /* Tranca prioridade */
+        rp->p_misc_flags |= LOCKED_PRI;
+      }
       return(OK);
   }
   return(EINVAL);

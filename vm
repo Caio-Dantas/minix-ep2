@@ -19,6 +19,8 @@ FILES=(
     "./servers/pm/table.c"
     "./kernel/proc.c"
     "./kernel/proc.h"
+    "./lib/syslib/sys_nice.c"
+    "./kernel/system/do_nice.c"
 )
 
 # --- Funções

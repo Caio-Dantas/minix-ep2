@@ -25,10 +25,6 @@
 #include "param.h"
 #include "../../kernel/proc.h"
 
-/* ####################################################################### */
-PUBLIC struct proc proc[NR_TASKS + NR_PROCS];
-/* ####################################################################### */
-
 /*===========================================================================*
  *				do_allocmem				     *
  *===========================================================================*/
@@ -441,21 +437,15 @@ int do_lockpriority(void)
 {
   int pid_filho, prioridade, nr_filho;
   struct mproc *mproc_filho;
-  struct proc *proc_filho;
+  message m;
   printf("==== Entrou na syscall =====\n");
 
   pid_filho = m_in.m1_i2;
   prioridade = m_in.m1_i3;
 
   /* Recupera o processo filho */
-  sys_getproctab(proc);
   nr_filho = proc_from_pid(pid_filho);
   mproc_filho = &mproc[nr_filho];
-  proc_filho = &proc[nr_filho];
-
-  if (proc_filho->p_misc_flags & LOCKED_PRI) {
-      return -1;
-  }
 
   /* Não é filho do processo que chamou lockpriority */
   if (mproc_filho->mp_parent != who_p) {
@@ -464,12 +454,14 @@ int do_lockpriority(void)
 
   /* Muda prioridade */
   mproc_filho->mp_nice = prioridade;
-  if (sys_nice(mproc_filho->mp_endpoint, prioridade) < 0) {
+  m.m1_i1 = mproc_filho->mp_endpoint;
+  m.m1_i2 = prioridade;
+  m.m1_i3 = 1;
+  if (_taskcall(SYSTASK, SYS_NICE, &m)) {
     return -1;
   }
 
   /* Deu certo! Trava prioridade */
-  proc_filho->p_misc_flags |= LOCKED_PRI;
   printf("==== Saiu da syscall ====\n");
   return 0;
 }

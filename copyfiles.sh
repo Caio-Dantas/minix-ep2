@@ -19,4 +19,7 @@ isoread $ISO_PATH table.c > $SRC/servers/pm/table.c
 isoread $ISO_PATH proc.c > $SRC/kernel/proc.c
 isoread $ISO_PATH proc.h > $SRC/kernel/proc.h
 
+isoread $ISO_PATH sys_nice.c > $SRC/lib/syslib/sys_nice.c
+isoread $ISO_PATH do_nice.c > $SRC/kernel/system/do_nice.c
+
 isoread $ISO_PATH testeloc.c > /root/testelock.c
