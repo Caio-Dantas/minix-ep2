@@ -476,6 +476,6 @@ int do_unlockpriority(void)
   m.m1_i1 = mproc_filho->mp_endpoint;
   m.m1_i2 = 0;
   m.m1_i3 = -1;
-  return _taskcall(SYSTASK, SYS_NICE, &m)
+  return _taskcall(SYSTASK, SYS_NICE, &m);
 }
 /* ######################################################################## */
