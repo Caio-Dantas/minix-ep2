@@ -12,6 +12,7 @@ libc_FILES=" \
 	_cfgetospeed.c \
 	_cfsetispeed.c \
 	_cfsetospeed.c \
+	_changealoc.c \
 	_chdir.c \
 	_chmod.c \
 	_chown.c \

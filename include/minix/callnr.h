@@ -47,6 +47,9 @@
 #define LSTAT		  50
 #define IOCTL		  54
 #define FCNTL		  55
+
+#define CHANGEALOC    57
+
 #define EXEC		  59
 #define UMASK		  60 
 #define CHROOT		  61 

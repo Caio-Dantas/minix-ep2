@@ -67,6 +67,8 @@ _PROTOTYPE( int do_freemem, (void)					);
 _PROTOTYPE( int do_lockpriority, (void));
 _PROTOTYPE( int do_unlockpriority, (void));
 /* ######################################################################## */
+_PROTOTYPE( int do_changealoc, (void));
+/* ######################################################################## */
 _PROTOTYPE( int do_getsetpriority, (void)					);
 _PROTOTYPE( ssize_t _read_pm, (int _fd, void *_buf, size_t _n, int s, int e));
 _PROTOTYPE( ssize_t _write_pm, (int _fd, void *_buf, size_t _n, int s, int e));

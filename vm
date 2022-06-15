@@ -6,21 +6,16 @@ RAM_SIZE=1024M
 
 FILES_IMG="files.iso"
 FILES=(
-    "./testelock.c"
     "./copyfiles.sh"
-    # Parte 1
-    "./servers/is/dmp_kernel.c"
-    # Parte 2
-    "./include/lockprioritylib.h"
-    "./include/minix/callnr.h"
-    "./servers/pm/mproc.h"
-    "./servers/pm/misc.c"
-    "./servers/pm/proto.h"
-    "./servers/pm/table.c"
-    "./kernel/proc.c"
-    "./kernel/proc.h"
-    "./lib/syslib/sys_nice.c"
-    "./kernel/system/do_nice.c"
+    "./tchange.c"
+    "include/minix/callnr.h"
+	"include/unistd.h"
+	"lib/posix/Makefile.in"
+	"servers/pm/alloc.c"
+	"servers/pm/misc.c"
+	"servers/pm/proto.h"
+	"servers/pm/table.c"
+    "lib/posix/_changealoc.c"
 )
 
 # --- Funções

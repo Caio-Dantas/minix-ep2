@@ -89,6 +89,11 @@
 #define _POSIX_NO_TRUNC       (-1)
 #define _POSIX_CHOWN_RESTRICTED  1
 
+#define NEXT_FIT 		0
+#define WORST_FIT 		1
+#define BEST_FIT 		2
+#define RANDOM_FIT 		3
+
 /* Function Prototypes. */
 _PROTOTYPE( void _exit, (int _status)					);
 _PROTOTYPE( int access, (const char *_path, int _amode)			);
@@ -144,6 +149,9 @@ _PROTOTYPE( int unlink, (const char *_path)				);
 _PROTOTYPE( ssize_t write, (int _fd, const void *_buf, size_t _n)	);
 _PROTOTYPE( int truncate, (const char *_path, off_t _length)		);
 _PROTOTYPE( int ftruncate, (int _fd, off_t _length)			);
+
+_PROTOTYPE( int changealoc, (int strat)					);
+
 
 /* Open Group Base Specifications Issue 6 (not complete) */
 _PROTOTYPE( int symlink, (const char *path1, const char *path2)		);

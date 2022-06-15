@@ -34,6 +34,8 @@
 PRIVATE struct hole hole[_NR_HOLES];
 PRIVATE u32_t high_watermark = 0;
 
+int aloc_strat = 0;
+
 PRIVATE struct hole *hole_head;	/* pointer to first hole */
 PRIVATE struct hole *free_slots;/* ptr to list of unused table slots */
 #if ENABLE_SWAP
@@ -54,6 +56,21 @@ FORWARD _PROTOTYPE( int swap_out, (void)				    );
 #else
 #define swap_out()	(0)
 #endif
+
+
+
+int do_changealoc(void)
+{
+  message m;
+
+  if (m_in.m1_i1 < 0 || m_in.m1_i1 > 3) {
+    aloc_strat = 0;
+    return 0;
+  }
+
+  aloc_strat = m_in.m1_i1;
+  return aloc_strat;
+}
 
 /*===========================================================================*
  *				alloc_mem				     *
