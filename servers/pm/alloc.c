@@ -88,6 +88,10 @@ phys_clicks clicks;		/* amount of memory requested */
  */
   phys_clicks old_base;
 
+  struct hole *hp_worst, *prev_ptr_worst;
+  struct hole *hp_best, *prev_ptr_best;
+
+
   do {
     switch (aloc_strat) {
         case 0: /* FIRST_FIT */
@@ -164,6 +168,74 @@ phys_clicks clicks;		/* amount of memory requested */
           }
           
             break;
+
+        case 2: /*WORST FIT*/
+          hp_worst = hole_head;
+          prev_ptr_worst = NIL_HOLE;
+          hp = hole_head;
+          prev_ptr = NIL_HOLE;
+          while (hp != NIL_HOLE && hp->h_base < swap_base) {
+              if (hp->h_len >= clicks && hp->h_len > hp_worst->h_len) {
+                hp_worst = hp;
+                prev_ptr_worst = prev_ptr;
+              }
+              prev_ptr = hp;
+              hp = hp->h_next;
+          }          
+          if (hp_worst != NIL_HOLE) {
+            hp = hp_worst;
+            prev_ptr = prev_ptr_worst;
+            /* We found a hole that is big enough.  Use it. */
+            old_base = hp->h_base;	/* remember where it started */
+            hp->h_base += clicks;	/* bite a piece off */
+            hp->h_len -= clicks;	/* ditto */
+
+            /* Remember new high watermark of used memory. */
+            if(hp->h_base > high_watermark)
+                high_watermark = hp->h_base;
+
+            /* Delete the hole if used up completely. */
+            if (hp->h_len == 0) del_slot(prev_ptr, hp);
+
+            /* Return the start address of the acquired block. */
+            return(old_base);
+          }
+
+        case 3: /*BEST FIT*/
+          hp_best = hole_head;
+          prev_ptr_best = NIL_HOLE;
+          hp = hole_head;
+          prev_ptr = NIL_HOLE;
+          while (hp != NIL_HOLE && hp->h_base < swap_base) {
+              if (hp->h_len >= clicks && hp->h_len < hp_best->h_len) {
+                hp_best = hp;
+                prev_ptr_best = prev_ptr;
+              }
+              prev_ptr = hp;
+              hp = hp->h_next;
+          }          
+          if (hp_best != NIL_HOLE) {
+            hp = hp_best;
+            prev_ptr = prev_ptr_best;
+            /* We found a hole that is big enough.  Use it. */
+            old_base = hp->h_base;	/* remember where it started */
+            hp->h_base += clicks;	/* bite a piece off */
+            hp->h_len -= clicks;	/* ditto */
+
+            /* Remember new high watermark of used memory. */
+            if(hp->h_base > high_watermark)
+                high_watermark = hp->h_base;
+
+            /* Delete the hole if used up completely. */
+            if (hp->h_len == 0) del_slot(prev_ptr, hp);
+
+            /* Return the start address of the acquired block. */
+            return(old_base);
+          }
+
+
+        break;
+
     }
   } while (swap_out());		/* try to swap some other process out */
   return(NO_MEM);
