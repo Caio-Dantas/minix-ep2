@@ -63,7 +63,7 @@ int do_changealoc(void)
 {
   message m;
 
-  if (m_in.m1_i1 < 0 || m_in.m1_i1 > 3) {
+  if (m_in.m1_i1 < 0 || m_in.m1_i1 > 4) {
     aloc_strat = 0;
     return 0;
   }
