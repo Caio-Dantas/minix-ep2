@@ -35,7 +35,7 @@ PRIVATE struct hole hole[_NR_HOLES];
 PRIVATE u32_t high_watermark = 0;
 
 int aloc_strat = 0;
-struct hole *hp, *prev_ptr;
+struct hole *hpr, *prev_pntr;
 
 
 PRIVATE struct hole *hole_head;	/* pointer to first hole */
@@ -74,6 +74,66 @@ int do_changealoc(void)
   return aloc_strat;
 }
 
+phys_clicks first_fit(phys_clicks clicks)
+{
+  phys_clicks old_base;
+
+  prev_pntr = NIL_HOLE;
+  hpr = NIL_HOLE;
+  while (hpr != NIL_HOLE && hpr->h_base < swap_base) {
+    if (hpr->h_len >= clicks) {
+      /* We found a hole that is big enough.  Use it. */
+      old_base = hpr->h_base;	/* remember where it started */
+      hpr->h_base += clicks;	/* bite a piece off */
+      hpr->h_len -= clicks;	/* ditto */
+
+      /* Remember new high watermark of used memory. */
+      if(hpr->h_base > high_watermark)
+          high_watermark = hpr->h_base;
+
+      /* Delete the hole if used up completely. */
+      if (hpr->h_len == 0) del_slot(prev_pntr, hpr);
+
+      /* Return the start address of the acquired block. */
+      return(old_base);
+    }
+
+    prev_pntr = hpr;
+    hpr = hpr->h_next;
+  }
+  return(NO_MEM);
+}
+
+phys_clicks next_fit(phys_clicks clicks)
+{
+  phys_clicks old_base;
+
+  while (hpr != NIL_HOLE && hpr->h_base < swap_base) {
+    if (hpr->h_len >= clicks) {
+      /* We found a hole that is big enough.  Use it. */
+      old_base = hpr->h_base;	/* remember where it started */
+      hpr->h_base += clicks;	/* bite a piece off */
+      hpr->h_len -= clicks;	/* ditto */
+
+      /* Remember new high watermark of used memory. */
+      if(hpr->h_base > high_watermark)
+          high_watermark = hpr->h_base;
+
+      /* Delete the hole if used up completely. */
+      if (hpr->h_len == 0) del_slot(prev_pntr, hpr);
+
+      /* Return the start address of the acquired block. */
+      return(old_base);
+    }
+
+    prev_pntr = hpr;
+    hpr = hpr->h_next;
+  }
+  /* Não encontrou nenhum buraco até o final da memória disponível, tenta a partir do início da fila (FIRST_FIT)*/
+  return first_fit(clicks);
+}
+
+
 /*===========================================================================*
  *				alloc_mem				     *
  *===========================================================================*/
@@ -86,85 +146,23 @@ phys_clicks clicks;		/* amount of memory requested */
  * always on a click boundary.  This procedure is called when memory is
  * needed for FORK or EXEC.  Swap other processes out if needed.
  */
-  phys_clicks old_base;
+
+  phys_clicks result;
 
   do {
     switch (aloc_strat) {
         case 0: /* FIRST_FIT */
-          prev_ptr = NIL_HOLE;
-          hp = hole_head;
-          while (hp != NIL_HOLE && hp->h_base < swap_base) {
-              if (hp->h_len >= clicks) {
-                  /* We found a hole that is big enough.  Use it. */
-                  old_base = hp->h_base;	/* remember where it started */
-                  hp->h_base += clicks;	/* bite a piece off */
-                  hp->h_len -= clicks;	/* ditto */
-
-                  /* Remember new high watermark of used memory. */
-                  if(hp->h_base > high_watermark)
-                      high_watermark = hp->h_base;
-
-                  /* Delete the hole if used up completely. */
-                  if (hp->h_len == 0) del_slot(prev_ptr, hp);
-
-                  /* Return the start address of the acquired block. */
-                  return(old_base);
-              }
-
-              prev_ptr = hp;
-              hp = hp->h_next;
-          }
-            break;
+          result = first_fit(clicks);
+          break;
         case 1: /* NEXT_FIT */
-            while (hp != NIL_HOLE && hp->h_base < swap_base) {
-                if (hp->h_len >= clicks) {
-                    /* We found a hole that is big enough.  Use it. */
-                    old_base = hp->h_base;	/* remember where it started */
-                    hp->h_base += clicks;	/* bite a piece off */
-                    hp->h_len -= clicks;	/* ditto */
-
-                    /* Remember new high watermark of used memory. */
-                    if(hp->h_base > high_watermark)
-                        high_watermark = hp->h_base;
-
-                    /* Delete the hole if used up completely. */
-                    if (hp->h_len == 0) del_slot(prev_ptr, hp);
-
-                    /* Return the start address of the acquired block. */
-                    return(old_base);
-                }
-
-                prev_ptr = hp;
-                hp = hp->h_next;
-            }
-
-          /* Não encontrou nenhum buraco até o final da memória disponível, tenta a partir do início da fila (FIRST_FIT)*/
-          prev_ptr = NIL_HOLE;
-          hp = hole_head;
-          while (hp != NIL_HOLE && hp->h_base < swap_base) {
-              if (hp->h_len >= clicks) {
-                  /* We found a hole that is big enough.  Use it. */
-                  old_base = hp->h_base;	/* remember where it started */
-                  hp->h_base += clicks;	/* bite a piece off */
-                  hp->h_len -= clicks;	/* ditto */
-
-                  /* Remember new high watermark of used memory. */
-                  if(hp->h_base > high_watermark)
-                      high_watermark = hp->h_base;
-
-                  /* Delete the hole if used up completely. */
-                  if (hp->h_len == 0) del_slot(prev_ptr, hp);
-
-                  /* Return the start address of the acquired block. */
-                  return(old_base);
-              }
-
-              prev_ptr = hp;
-              hp = hp->h_next;
-          }
-          
-            break;
+          result = next_fit(clicks);
+          break;
     }
+
+    if (result != NO_MEM) {
+        return result;
+    }
+
   } while (swap_out());		/* try to swap some other process out */
   return(NO_MEM);
 }
