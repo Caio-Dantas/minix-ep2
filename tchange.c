@@ -4,7 +4,7 @@
 int main(void) 
 {
     int r;
-    r = changealoc(RANDOM_FIT);
+    r = changealoc(NEXT_FIT);
     printf("Aloc strat is %d\n", r);
     return 0;
 }

@@ -90,10 +90,10 @@
 #define _POSIX_CHOWN_RESTRICTED  1
 
 #define FIRST_FIT 		0
-#define WORST_FIT 		1
-#define BEST_FIT 		2
-#define RANDOM_FIT 		3
-#define NEXT_FIT 		4
+#define NEXT_FIT 		1
+#define WORST_FIT 		2
+#define BEST_FIT 		3
+#define RANDOM_FIT 		4
 
 /* Function Prototypes. */
 _PROTOTYPE( void _exit, (int _status)					);
