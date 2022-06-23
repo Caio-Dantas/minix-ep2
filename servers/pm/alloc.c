@@ -74,6 +74,22 @@ int do_changealoc(void)
   return aloc_strat;
 }
 
+phys_clicks use_hole(phys_clicks clicks)
+{
+  phys_clicks old_base;
+  old_base = hp->h_base;	/* remember where it started */
+  hp->h_base += clicks;	/* bite a piece off */
+  hp->h_len -= clicks;	/* ditto */
+
+  /* Remember new high watermark of used memory. */
+  if(hp->h_base > high_watermark)
+      high_watermark = hp->h_base;
+
+  /* Delete the hole if used up completely. */
+  if (hp->h_len == 0) del_slot(prev_ptr, hp);
+  return old_base;
+}
+
 phys_clicks first_fit(phys_clicks clicks)
 {
   phys_clicks old_base;
@@ -82,20 +98,7 @@ phys_clicks first_fit(phys_clicks clicks)
   hp = hole_head;
   while (hp != NIL_HOLE && hp->h_base < swap_base) {
       if (hp->h_len >= clicks) {
-          /* We found a hole that is big enough.  Use it. */
-          old_base = hp->h_base;	/* remember where it started */
-          hp->h_base += clicks;	/* bite a piece off */
-          hp->h_len -= clicks;	/* ditto */
-
-          /* Remember new high watermark of used memory. */
-          if(hp->h_base > high_watermark)
-              high_watermark = hp->h_base;
-
-          /* Delete the hole if used up completely. */
-          if (hp->h_len == 0) del_slot(prev_ptr, hp);
-
-          /* Return the start address of the acquired block. */
-          return(old_base);
+          return use_hole(clicks);
       }
 
       prev_ptr = hp;
@@ -111,22 +114,8 @@ phys_clicks next_fit(phys_clicks clicks)
 
   while (hp != NIL_HOLE && hp->h_base < swap_base) {
       if (hp->h_len >= clicks) {
-          /* We found a hole that is big enough.  Use it. */
-          old_base = hp->h_base;	/* remember where it started */
-          hp->h_base += clicks;	/* bite a piece off */
-          hp->h_len -= clicks;	/* ditto */
-
-          /* Remember new high watermark of used memory. */
-          if(hp->h_base > high_watermark)
-              high_watermark = hp->h_base;
-
-          /* Delete the hole if used up completely. */
-          if (hp->h_len == 0) del_slot(prev_ptr, hp);
-
-          /* Return the start address of the acquired block. */
-          return(old_base);
+        return use_hole(clicks);
       }
-
       prev_ptr = hp;
       hp = hp->h_next;
   }
@@ -157,20 +146,7 @@ phys_clicks worst_fit(phys_clicks clicks)
   if (hp_worst != NIL_HOLE) {
     hp = hp_worst;
     prev_ptr = prev_ptr_worst;
-    /* We found a hole that is big enough.  Use it. */
-    old_base = hp->h_base;	/* remember where it started */
-    hp->h_base += clicks;	/* bite a piece off */
-    hp->h_len -= clicks;	/* ditto */
-
-    /* Remember new high watermark of used memory. */
-    if(hp->h_base > high_watermark)
-        high_watermark = hp->h_base;
-
-    /* Delete the hole if used up completely. */
-    if (hp->h_len == 0) del_slot(prev_ptr, hp);
-
-    /* Return the start address of the acquired block. */
-    return(old_base);
+    return use_hole(clicks);
   }
   return(NO_MEM);
 }
@@ -197,20 +173,7 @@ phys_clicks best_fit(phys_clicks clicks)
   if (hp_best != NIL_HOLE) {
     hp = hp_best;
     prev_ptr = prev_ptr_best;
-    /* We found a hole that is big enough.  Use it. */
-    old_base = hp->h_base;	/* remember where it started */
-    hp->h_base += clicks;	/* bite a piece off */
-    hp->h_len -= clicks;	/* ditto */
-
-    /* Remember new high watermark of used memory. */
-    if(hp->h_base > high_watermark)
-        high_watermark = hp->h_base;
-
-    /* Delete the hole if used up completely. */
-    if (hp->h_len == 0) del_slot(prev_ptr, hp);
-
-    /* Return the start address of the acquired block. */
-    return(old_base);
+    return use_hole(clicks);
   }
   return(NO_MEM);
 }
