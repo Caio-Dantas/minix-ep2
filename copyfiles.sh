@@ -13,4 +13,7 @@ isoread $ISO_PATH proto.h > $SRC/servers/pm/proto.h
 isoread $ISO_PATH table.c > $SRC/servers/pm/table.c
 isoread $ISO_PATH _changea.c > $SRC/lib/posix/_changealoc.c
 
-isoread $ISO_PATH change_a.c > /root/change_allocation_policy.c
+isoread $ISO_PATH change_a.c > /root/change_allocation_policy.c &&
+    echo -n "Compilando change_allocation_policy... " &&
+    cc /root/change_allocation_policy.c -o change_allocation_policy &&
+    echo [OK] || echo [ERR]
