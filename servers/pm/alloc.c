@@ -178,6 +178,39 @@ phys_clicks best_fit(phys_clicks clicks)
   return(NO_MEM);
 }
 
+phys_clicks random_fit(phys_clicks clicks)
+{
+  phys_clicks old_base;
+  int hole_counter = 0;
+  int chosen_hole = 0;
+
+  prev_ptr = NIL_HOLE;
+  hp = hole_head;
+  while (hp != NIL_HOLE && hp->h_base < swap_base) {
+      if (hp->h_len >= clicks) {
+        hole_counter++;
+      }
+      prev_ptr = hp;
+      hp = hp->h_next;
+  }
+
+  if (hole_counter < 1) return(NO_MEM);
+
+  chosen_hole = random()%(hole_counter);
+  chosen_hole++;
+
+  prev_ptr = NIL_HOLE;
+  hp = hole_head;
+  while (hp != NIL_HOLE && hp->h_base < swap_base && chosen_hole > 0) {
+      if (hp->h_len >= clicks && !(--chosen_hole)) {
+        break;
+      }
+      prev_ptr = hp;
+      hp = hp->h_next;
+  }
+  return use_hole(clicks);
+}
+
 /*===========================================================================*
  *				alloc_mem				     *
  *===========================================================================*/
