@@ -13,4 +13,4 @@ isoread $ISO_PATH proto.h > $SRC/servers/pm/proto.h
 isoread $ISO_PATH table.c > $SRC/servers/pm/table.c
 isoread $ISO_PATH _changea.c > $SRC/lib/posix/_changealoc.c
 
-isoread $ISO_PATH tchange.c > /root/tchange.c
+isoread $ISO_PATH change_a.c > /root/change_allocation_policy.c

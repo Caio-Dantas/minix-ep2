@@ -7,7 +7,7 @@ RAM_SIZE=1024M
 FILES_IMG="files.iso"
 FILES=(
     "./copyfiles.sh"
-    "./tchange.c"
+    "./change_allocation_policy.c"
     "include/minix/callnr.h"
 	"include/unistd.h"
 	"lib/posix/Makefile.in"
