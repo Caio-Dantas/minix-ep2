@@ -48,3 +48,5 @@ para um dos identificadores das estratégias de alocação e realizar a própria
 chamada de sistema.
 
 ## Parte 4
+
+Para implementar o programa de usuário `memstat.c` foi necessário incluir um novo arquivo (`_printholes.c`) a biblioteca posix presente no minix para que pudéssemos obter e exibir as informações necessárias referente ao buracos presentes na memória do sistema. Mais adentro da implementação de `printholes`, foi necessário utilizar a chamada de sistema `getsysinfo` com o argumento `SI_MEM_ALLOC` para que obtivéssemos as informações necessárias referente aos buracos na memória, com essa informação podemos contar a quantidade de buracos, calcular a média dos tamanhos, a mediana e o desvio padrão, todas informações são exibidas com um `printf` ao ser executado `print_holes`. No nosso arquivo de usuário `memstat.c` chamamos `print_holes` a cada 1 segundo de intervalo e evitando o bloqueio da saída padrão. Todas informações sao exibidas na unidade kyloByte (kB).
