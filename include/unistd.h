@@ -152,6 +152,7 @@ _PROTOTYPE( int truncate, (const char *_path, off_t _length)		);
 _PROTOTYPE( int ftruncate, (int _fd, off_t _length)			);
 
 _PROTOTYPE( int changealoc, (int strat)					);
+_PROTOTYPE( void print_holes, (void)					);
 
 
 /* Open Group Base Specifications Issue 6 (not complete) */

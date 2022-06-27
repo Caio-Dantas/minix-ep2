@@ -58,6 +58,7 @@ libc_FILES=" \
 	_pathconf.c \
 	_pause.c \
 	_pipe.c \
+	_printholes.c \
 	_ptrace.c \
 	_read.c \
 	_readdir.c \

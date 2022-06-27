@@ -8,6 +8,7 @@ FILES_IMG="files.iso"
 FILES=(
     "./copyfiles.sh"
     "./change_allocation_policy.c"
+    "./memstat.c"
     "include/minix/callnr.h"
 	"include/unistd.h"
 	"lib/posix/Makefile.in"
@@ -16,6 +17,7 @@ FILES=(
 	"servers/pm/proto.h"
 	"servers/pm/table.c"
     "lib/posix/_changealoc.c"
+    "lib/posix/_printholes.c"
 )
 
 # --- Funções
