@@ -61,7 +61,8 @@ PUBLIC void print_holes(void) {
   }
   sd = sqrt(aux_sd / num_holes);
 
-  printf("\nTamanho medio:%dkB\tMediana:%dkB\tDesvio padrao:%dkB", holes_avg,
-         median, sd);
+  printf("\nNumero buracos: %d\tTamanho medio:%dkB\tMediana:%dkB\tDesvio "
+         "padrao:%dkB",
+         num_holes, holes_avg, median, sd);
 }
 /* ######################################################################## */
