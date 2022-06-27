@@ -34,9 +34,10 @@
 PRIVATE struct hole hole[_NR_HOLES];
 PRIVATE u32_t high_watermark = 0;
 
+/* ######################################################################## */
 int aloc_strat = 0;
 struct hole *hp, *prev_ptr;
-
+/* ######################################################################## */
 
 PRIVATE struct hole *hole_head;	/* pointer to first hole */
 PRIVATE struct hole *free_slots;/* ptr to list of unused table slots */
@@ -61,6 +62,7 @@ FORWARD _PROTOTYPE( int swap_out, (void)				    );
 
 
 
+/* ######################################################################## */
 int do_changealoc(void)
 {
   message m;
@@ -210,6 +212,7 @@ phys_clicks random_fit(phys_clicks clicks)
   }
   return use_hole(clicks);
 }
+/* ######################################################################## */
 
 /*===========================================================================*
  *				alloc_mem				     *
@@ -223,6 +226,7 @@ phys_clicks clicks;		/* amount of memory requested */
  * always on a click boundary.  This procedure is called when memory is
  * needed for FORK or EXEC.  Swap other processes out if needed.
  */
+/* ######################################################################## */
   phys_clicks result;
   do {
     switch (aloc_strat) {
@@ -242,6 +246,7 @@ phys_clicks clicks;		/* amount of memory requested */
     if (result != NO_MEM) return result;
   } while (swap_out());		/* try to swap some other process out */
   return(NO_MEM);
+/* ######################################################################## */
 }
 
 /*===========================================================================*

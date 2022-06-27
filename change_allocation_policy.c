@@ -1,3 +1,4 @@
+/* ######################################################################## */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -37,3 +38,4 @@ int get_aloc_strategy(const char *strategy_string) {
   }
   return -1;
 }
+/* ######################################################################## */

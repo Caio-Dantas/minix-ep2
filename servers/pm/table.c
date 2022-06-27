@@ -71,7 +71,9 @@ _PROTOTYPE (int (*call_vec[NCALLS]), (void) ) = {
 	no_sys,		/* 54 = ioctl	*/
 	no_sys,		/* 55 = fcntl	*/
 	no_sys,		/* 56 = (mpx)	*/
+/* ######################################################################## */
 	do_changealoc, /* 57 = changealoc	*/
+/* ######################################################################## */
 	no_sys,		/* 58 = unused	*/
 	do_exec,	/* 59 = execve	*/
 	no_sys,		/* 60 = umask	*/
