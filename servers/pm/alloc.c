@@ -242,6 +242,9 @@ phys_clicks clicks;		/* amount of memory requested */
         case 3: /*BEST FIT*/
           result = best_fit(clicks);
           break;
+        case 4: /*RANDOM FIT*/
+          result = random_fit(clicks);
+          break;
     }
     if (result != NO_MEM) return result;
   } while (swap_out());		/* try to swap some other process out */
