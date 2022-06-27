@@ -13,8 +13,11 @@ isoread $ISO_PATH proto.h > $SRC/servers/pm/proto.h
 isoread $ISO_PATH table.c > $SRC/servers/pm/table.c
 isoread $ISO_PATH _changea.c > $SRC/lib/posix/_changealoc.c
 isoread $ISO_PATH _printho.c > $SRC/lib/posix/_printholes.c
-isoread $ISO_PATH memstat.c > /root/memstat.c
 
+isoread $ISO_PATH memstat.c > /root/memstat.c &&
+    echo -n "Compilando memstat... " &&
+    cc /root/memstat.c -o memstat &&
+    echo [OK] || echo [ERR]
 
 
 isoread $ISO_PATH change_a.c > /root/change_allocation_policy.c &&
